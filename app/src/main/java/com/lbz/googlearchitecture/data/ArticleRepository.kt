@@ -4,8 +4,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.lbz.googlearchitecture.api.ArticleService
+import com.lbz.googlearchitecture.db.ArticleDatabase
 import com.lbz.googlearchitecture.model.Article
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 /**
  * @author: laibinzhi
@@ -13,12 +15,22 @@ import kotlinx.coroutines.flow.Flow
  * @github: https://github.com/laibinzhi
  * @blog: https://www.laibinzhi.top/
  */
-class ArticleRepository(private val service: ArticleService) {
+class ArticleRepository @Inject constructor(
+    private val service: ArticleService,
+    private val database: ArticleDatabase
+) {
+
+    private val pagingSourceFactory = { database.articleDao().getLocalArticles() }
 
     fun getArticlestStream(): Flow<PagingData<Article>> {
         return Pager(
-            config = PagingConfig(pageSize = NETWORK_PAGE_SIZE, enablePlaceholders = false),
-            pagingSourceFactory = { ArticlePagingSource(service) }
+            config = PagingConfig(
+                pageSize = NETWORK_PAGE_SIZE,
+                enablePlaceholders = false,
+                initialLoadSize = 2 * NETWORK_PAGE_SIZE
+            ),
+            remoteMediator = ArticleRemoteMediator(service, database),
+            pagingSourceFactory = pagingSourceFactory
         ).flow
     }
 

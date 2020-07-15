@@ -2,6 +2,7 @@ package com.lbz.googlearchitecture.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.RoomDatabase
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -12,7 +13,9 @@ import com.google.gson.annotations.SerializedName
  */
 @Entity(tableName = "articles")
 data class Article(
-    @PrimaryKey @field:SerializedName("id")
+    @PrimaryKey(autoGenerate = true)
+    val databaseId: Int,
+    @field:SerializedName("id")
     val id: Int,
     @field:SerializedName("title")
     val title: String,
@@ -73,5 +76,7 @@ data class Article(
     @field:SerializedName("visible")
     val visible: Int,
     @field:SerializedName("zan")
-    val zan: Int
+    val zan: Int,
+    var prevKey: Int?,
+    var nextKey: Int?
 )

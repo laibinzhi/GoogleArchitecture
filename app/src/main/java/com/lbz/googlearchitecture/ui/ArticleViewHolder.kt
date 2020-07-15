@@ -3,11 +3,9 @@ package com.lbz.googlearchitecture.ui
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.lbz.googlearchitecture.R
+import com.lbz.googlearchitecture.databinding.ArticleViewItemBinding
 import com.lbz.googlearchitecture.model.Article
 
 /**
@@ -16,34 +14,32 @@ import com.lbz.googlearchitecture.model.Article
  * @github: https://github.com/laibinzhi
  * @blog: https://www.laibinzhi.top/
  */
-class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    private val title: TextView = view.findViewById(R.id.title)
-
-    private var article: Article? = null
-
-    init {
-        view.setOnClickListener {
-            article?.link?.let { link ->
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                view.context.startActivity(intent)
-            }
-        }
-    }
+class ArticleViewHolder(private val binding: ArticleViewItemBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bind(article: Article) {
         showArticleData(article)
     }
 
     private fun showArticleData(article: Article) {
-        this.article = article
-        title.text = article.title
+        binding.article = article
+        binding.root.setOnClickListener {
+            article?.link?.let {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                binding.root.context.startActivity(intent)
+            }
+        }
     }
 
     companion object {
         fun create(parent: ViewGroup): ArticleViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.article_view_item, parent, false)
-            return ArticleViewHolder(view)
+            return ArticleViewHolder(
+                ArticleViewItemBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
         }
     }
 }

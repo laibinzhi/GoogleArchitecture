@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -35,6 +36,11 @@ android {
     viewBinding {
         enabled = true
     }
+
+    dataBinding {
+        enabled = true
+    }
+
 }
 
 dependencies {
@@ -56,6 +62,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
     implementation "androidx.paging:paging-runtime:$pagingVersion"
+    debugImplementation 'com.idescout.sql:sqlscout-server:4.1'
     kapt "androidx.room:room-compiler:$roomVersion"
 
     // retrofit
@@ -68,5 +75,19 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test:runner:$runnerVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+
+    //as的Room Sqlite插件
+    releaseImplementation "com.idescout.sql:sqlscout-server-noop:&sqlscout_server_version"
+
+    //刷新组件
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefreshVersion"
+
+    //hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    // Navigation
+    implementation "android.arch.navigation:navigation-fragment-ktx:$version_navigation"
+    implementation "android.arch.navigation:navigation-ui-ktx:$version_navigation"
 
 }

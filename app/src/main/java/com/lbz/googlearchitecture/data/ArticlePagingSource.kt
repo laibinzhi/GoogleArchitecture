@@ -12,7 +12,7 @@ import java.io.IOException
  * @github: https://github.com/laibinzhi
  * @blog: https://www.laibinzhi.top/
  */
-private const val ARTICLE_STARTING_PAGE_INDEX = 1
+private const val ARTICLE_STARTING_PAGE_INDEX = 0
 
 class ArticlePagingSource(private val service: ArticleService) : PagingSource<Int, Article>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
@@ -22,7 +22,7 @@ class ArticlePagingSource(private val service: ArticleService) : PagingSource<In
             val repos = response.data.datas
             LoadResult.Page(
                 data = repos,
-                prevKey = if (position == ARTICLE_STARTING_PAGE_INDEX) null else position - 1,
+                prevKey = null,
                 nextKey = if (repos.isEmpty()) null else position + 1
             )
         } catch (exception: IOException) {

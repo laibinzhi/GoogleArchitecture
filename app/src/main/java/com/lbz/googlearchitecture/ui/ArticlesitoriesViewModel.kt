@@ -8,6 +8,7 @@ import com.lbz.googlearchitecture.data.ArticleRepository
 import com.lbz.googlearchitecture.model.Article
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 /**
  * @author: laibinzhi
@@ -16,13 +17,10 @@ import kotlinx.coroutines.flow.Flow
  * @blog: https://www.laibinzhi.top/
  */
 @ExperimentalCoroutinesApi
-class ArticlesitoriesViewModel(private val repository: ArticleRepository) : ViewModel() {
+class ArticlesitoriesViewModel @Inject constructor(private val repository: ArticleRepository) :
+    ViewModel() {
 
-    fun getArticles(): Flow<PagingData<Article>> {
-
-        val newResult: Flow<PagingData<Article>> = repository.getArticlestStream()
-            .cachedIn(viewModelScope)
-        return newResult
-    }
+    fun getArticles(): Flow<PagingData<Article>> = repository.getArticlestStream()
+        .cachedIn(viewModelScope)
 
 }
