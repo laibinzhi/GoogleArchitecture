@@ -26,5 +26,10 @@
       <option name="name" value="IDEScout, Inc." />
       <option name="url" value="http://www.idescout.com/maven/repo/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="https://jitpack.io" />
+    </remote-repository>
   </component>
 </project>

@@ -6,4 +6,14 @@
     <string name="no_results">No results 😓</string>
     <string name="unknown">\?</string>
     <string name="retry">Retry</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">首页</string>
+    <string name="title_project">项目</string>
+    <string name="title_mine">我的</string>
+    <string name="null_tag">null</string>
+    <string name="fab_scrolling_view_behavior">com.lbz.googlearchitecture.widget.FastBackTopFabBehaviorJava</string>
+    <string name="article_tag_top">置顶</string>
+    <string name="article_tag_new">新</string>
+    <string name="mine">我的</string>
+    <string name="menu_search_title">搜索</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.lbz.googlearchitecture.di
 
-import com.lbz.googlearchitecture.api.ArticleService
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.lbz.googlearchitecture.api.LbzService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,13 +22,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 object NetworkModule {
 
     @Provides
-    fun provideArticleService(okHttpClient: OkHttpClient): ArticleService {
+    fun provideArticleService(okHttpClient: OkHttpClient): LbzService {
         return Retrofit.Builder()
-            .baseUrl(ArticleService.BASE_URL)
+            .baseUrl(LbzService.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
-            .create(ArticleService::class.java)
+            .create(LbzService::class.java)
     }
 
     @Provides

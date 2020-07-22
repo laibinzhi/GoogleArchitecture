@@ -2,10 +2,12 @@ package com.lbz.googlearchitecture.di
 
 import android.content.Context
 import androidx.lifecycle.ViewModelProvider
-import com.lbz.googlearchitecture.api.ArticleService
-import com.lbz.googlearchitecture.data.ArticleRepository
-import com.lbz.googlearchitecture.db.ArticleDatabase
-import com.lbz.googlearchitecture.ui.ViewModelFactory
+import com.lbz.googlearchitecture.api.LbzService
+import com.lbz.googlearchitecture.data.article.ArticleRepository
+import com.lbz.googlearchitecture.data.project.ProjectRepository
+import com.lbz.googlearchitecture.db.LbzDatabase
+import com.lbz.googlearchitecture.ui.home.ArticleViewModelFactory
+import com.lbz.googlearchitecture.ui.project.ProjectViewModelFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,22 +27,44 @@ object AppModule {
 
     @Provides
     fun provideArticleRepository(
-        service: ArticleService,
-        database: ArticleDatabase
+        service: LbzService,
+        database: LbzDatabase
     ): ArticleRepository {
-        return ArticleRepository(service, database)
+        return ArticleRepository(
+            service,
+            database
+        )
     }
 
     @Provides
-    fun provideArticleDatabase(@ApplicationContext context: Context): ArticleDatabase {
-        return ArticleDatabase.getInstance(context)
+    fun provideProjectRepository(
+        service: LbzService,
+        database: LbzDatabase
+    ): ProjectRepository {
+        return ProjectRepository(
+            service,
+            database
+        )
+    }
+
+    @Provides
+    fun provideLbzDatabase(@ApplicationContext context: Context): LbzDatabase {
+        return LbzDatabase.getInstance(context)
     }
 
 
     @Provides
-    fun provideViewModelFactory(articleRepository: ArticleRepository): ViewModelProvider.Factory {
-        return ViewModelFactory(articleRepository)
+    fun provideArticleViewModelFactory(articleRepository: ArticleRepository): ViewModelProvider.Factory {
+        return ArticleViewModelFactory(
+            articleRepository
+        )
     }
 
+    @Provides
+    fun provideProjectViewModelFactory(projectRepository: ProjectRepository): ViewModelProvider.Factory {
+        return ProjectViewModelFactory(
+            projectRepository
+        )
+    }
 
 }

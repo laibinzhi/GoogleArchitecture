@@ -3,12 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/articleList">
+    app:startDestination="@id/fragment_main">
 
     <fragment
-        android:id="@+id/articleList"
-        android:name="com.lbz.googlearchitecture.ui.ArticleFragment"
-        android:label="fragment_dev_byte"
-        tools:layout="@layout/fragment_article" />
+        android:id="@+id/fragment_main"
+        android:name="com.lbz.googlearchitecture.ui.main.MainFragment"
+        tools:layout="@layout/fragment_main" />
+
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="com.lbz.googlearchitecture.ui.home.HomeFragment"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/fragment_project"
+        android:name="com.lbz.googlearchitecture.ui.project.ProjectFragment"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/fragment_mine"
+        android:name="com.lbz.googlearchitecture.ui.mine.MineFragment"
+        tools:layout="@layout/fragment_home" />
+
 
 </navigation>

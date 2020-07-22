@@ -28,6 +28,11 @@ android {
         freeCompilerArgs += ["-Xopt-in=kotlin.RequiresOptIn"]
     }
 
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+    }
+
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
@@ -70,6 +75,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:retrofit-mock:$retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttpLoggingInterceptorVersion"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$version_retrofit_coroutines_adapter"
 
     // testing
     testImplementation "junit:junit:$junitVersion"
@@ -77,7 +83,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
 
     //as的Room Sqlite插件
-    releaseImplementation "com.idescout.sql:sqlscout-server-noop:&sqlscout_server_version"
+    releaseImplementation "com.idescout.sql:sqlscout-server-noop:$sqlscout_server_version"
 
     //刷新组件
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefreshVersion"
@@ -85,9 +91,31 @@ dependencies {
     //hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_viewmodel_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_viewmodel_version"
 
     // Navigation
     implementation "android.arch.navigation:navigation-fragment-ktx:$version_navigation"
     implementation "android.arch.navigation:navigation-ui-ktx:$version_navigation"
+
+    //viewpager指示器
+    implementation "com.github.hackware1993:MagicIndicator:$version_magic_indicator"
+
+    // Glide for images
+    implementation "com.github.bumptech.glide:glide:$version_glide"
+
+    //utilcodex  https://github.com/Blankj/AndroidUtilCode/blob/master/lib/utilcode/README-CN.md
+    implementation "com.blankj:utilcodex:$version_utilcodex"
+
+    debugImplementation "com.amitshekhar.android:debug-db:$version_debug_database"
+
+    debugImplementation "com.amitshekhar.android:debug-db-encrypt:$version_debug_database"
+
+    //recyclerview-animators
+    implementation "jp.wasabeef:recyclerview-animators:$recyclerview_animators_version"
+
+    //banner
+    implementation "com.youth.banner:banner:$youth_banner_version"
+
 
 }
