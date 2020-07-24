@@ -8,12 +8,20 @@
     <fragment
         android:id="@+id/fragment_main"
         android:name="com.lbz.googlearchitecture.ui.main.MainFragment"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_fragment_main_to_fragment_search"
+            app:destination="@id/fragment_search"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_home"
         android:name="com.lbz.googlearchitecture.ui.home.HomeFragment"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home"></fragment>
 
     <fragment
         android:id="@+id/fragment_project"
@@ -25,5 +33,28 @@
         android:name="com.lbz.googlearchitecture.ui.mine.MineFragment"
         tools:layout="@layout/fragment_home" />
 
+    <fragment
+        android:id="@+id/fragment_search"
+        android:name="com.lbz.googlearchitecture.ui.search.SearchFragment"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_fragment_search_to_fragment_search_result"
+            app:destination="@id/fragment_search_result"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_search_result"
+        android:name="com.lbz.googlearchitecture.ui.search.SearchResultFragment"
+        tools:layout="@layout/fragment_search_result" >
+
+        <argument
+            android:name="search"
+            app:argType="string" />
+
+    </fragment>
 
 </navigation>

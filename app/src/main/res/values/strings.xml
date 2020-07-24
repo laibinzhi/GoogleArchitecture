@@ -2,7 +2,7 @@
     <string name="app_name">GoogleArchitecture</string>
     <string name="loading">Loading</string>
     <string name="language">Language: %s</string>
-    <string name="search_hint">GitHub Repository</string>
+    <string name="search_hint">输入关键字搜索</string>
     <string name="no_results">No results 😓</string>
     <string name="unknown">\?</string>
     <string name="retry">Retry</string>
@@ -16,4 +16,12 @@
     <string name="article_tag_new">新</string>
     <string name="mine">我的</string>
     <string name="menu_search_title">搜索</string>
+    <string name="hot_search">热门搜索</string>
+    <string name="search_history">搜索历史</string>
+    <string name="history_clear_btn_label">清空</string>
+    <string name="search_menu_title">搜索</string>
+    <string name="delete_search_history_dialog_title">温馨提示</string>
+    <string name="delete_search_history_dialog_message">确定清空吗?</string>
+    <string name="delete_search_history_dialog_negative_btn_text">取消</string>
+    <string name="delete_search_history_dialog_positive_btn_text">清空</string>
 </resources>

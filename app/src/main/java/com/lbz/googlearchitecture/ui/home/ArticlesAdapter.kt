@@ -16,7 +16,11 @@ import com.lbz.googlearchitecture.ui.base.BasePagingDataAdapter
 private const val TYPE_BANNER = 1
 private const val TYPE_DATA = 2
 
-class ArticlesAdapter : BasePagingDataAdapter<Article, RecyclerView.ViewHolder>(REPO_COMPARATOR) {
+/**
+ *  isHome  true->首页  false->search
+ */
+class ArticlesAdapter(private val isHome: Boolean) :
+    BasePagingDataAdapter<Article, RecyclerView.ViewHolder>(REPO_COMPARATOR) {
 
     private var banners: List<Banner> = emptyList()
 
@@ -25,8 +29,12 @@ class ArticlesAdapter : BasePagingDataAdapter<Article, RecyclerView.ViewHolder>(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == 0) {
-            TYPE_BANNER
+        return if (isHome) {
+            if (position == 0) {
+                TYPE_BANNER
+            } else {
+                TYPE_DATA
+            }
         } else {
             TYPE_DATA
         }
@@ -52,7 +60,7 @@ class ArticlesAdapter : BasePagingDataAdapter<Article, RecyclerView.ViewHolder>(
 
     override fun funBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is BannerViewHolder) {
-            (holder as BannerViewHolder).bind(banners)
+            holder.bind(banners)
         } else {
             val repoItem = getItem(position)
             if (repoItem != null) {

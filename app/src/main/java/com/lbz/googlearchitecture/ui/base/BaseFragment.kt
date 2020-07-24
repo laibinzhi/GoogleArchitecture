@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import com.blankj.utilcode.util.KeyboardUtils
 
 /**
  * @author: laibinzhi
@@ -62,5 +63,10 @@ abstract class BaseFragment<DB : ViewDataBinding> : Fragment() {
     abstract fun lazyLoadData()
 
     abstract fun initListener()
+
+    override fun onPause() {
+        super.onPause()
+        KeyboardUtils.hideSoftInput(this!!.activity!!)
+    }
 
 }

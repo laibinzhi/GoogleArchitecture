@@ -6,10 +6,15 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.lbz.googlearchitecture.db.RemoteKeys
+import com.lbz.googlearchitecture.api.DataResponse
 import com.lbz.googlearchitecture.api.LbzService
+import com.lbz.googlearchitecture.api.PageBean
 import com.lbz.googlearchitecture.db.LbzDatabase
+import com.lbz.googlearchitecture.db.RemoteKeys
 import com.lbz.googlearchitecture.model.Article
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 import java.io.InvalidObjectException
@@ -53,7 +58,6 @@ class ArticleRemoteMediator(
                 remoteKeys.nextKey
             }
         }
-        Log.d(TAG, "page:$page   loadType:$loadType")
 
         var localArticleSize = 0 //本地数据库数据大小
 
@@ -62,9 +66,11 @@ class ArticleRemoteMediator(
         }
 
         try {
-            val apiResponse = service.getArticles(page)
 
-            val articles = apiResponse.data.datas
+//            val apiResponse = service.getArticles(page)
+//            val articles = apiResponse.data.datas
+
+            val articles = getHomeArticleAndTopArticle(page).data.datas
             val endOfPaginationReached = articles.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -123,6 +129,23 @@ class ArticleRemoteMediator(
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { repoId ->
                 database.remoteKeysDao().remoteKeysArticleId(repoId)
+            }
+        }
+    }
+
+    private suspend fun getHomeArticleAndTopArticle(page: Int): DataResponse<PageBean<Article>> {
+        return withContext(Dispatchers.IO) {
+            val data = async { service.getArticles(page) }
+            Log.e(TAG, "获取正常列表size:" + data.await().data.datas.size)
+            if (page == 0) {
+                val topData = async { service.getTopArticlesAsync() }
+                Log.e(TAG, "获取置顶列表size:" + topData.await().data.size)
+                data.await().data.datas.addAll(0, topData.await().data)
+                Log.e(TAG, "最后获取大小:" + data.await().data.datas.size)
+                data.await()
+            } else {
+                Log.e(TAG, "最后获取大小:" + data.await().data.datas.size)
+                data.await()
             }
         }
     }

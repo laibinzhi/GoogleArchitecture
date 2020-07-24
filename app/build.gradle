@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -116,6 +117,15 @@ dependencies {
 
     //banner
     implementation "com.youth.banner:banner:$youth_banner_version"
+
+    implementation "com.google.android:flexbox:$flexbox_version"
+
+    //万能material-dialogs
+    implementation "com.afollestad.material-dialogs:lifecycle:$material_dialog_version"
+    implementation "com.afollestad.material-dialogs:core:$material_dialog_version"
+    implementation "com.afollestad.material-dialogs:color:$material_dialog_version"
+    implementation "com.afollestad.material-dialogs:datetime:$material_dialog_version"
+    implementation "com.afollestad.material-dialogs:bottomsheets:$material_dialog_version"
 
 
 }

@@ -1,11 +1,9 @@
 package com.lbz.googlearchitecture.api
 
-import com.lbz.googlearchitecture.model.Article
-import com.lbz.googlearchitecture.model.Banner
-import com.lbz.googlearchitecture.model.ProjectData
-import com.lbz.googlearchitecture.model.ProjectTitle
+import com.lbz.googlearchitecture.model.*
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -33,7 +31,17 @@ interface LbzService {
     fun getBannerAsync(): Deferred<DataResponse<List<Banner>>>
 
     @GET("/article/top/json")
-    fun getTopArticlesAsync(): Deferred<DataResponse<List<Article>>>
+    suspend fun getTopArticlesAsync(): DataResponse<List<Article>>
+
+    @GET("/hotkey/json")
+    fun getHotKeyDataAsync(): Deferred<DataResponse<List<Hotkey>>>
+
+    @POST("/article/query/{page}/json")
+    suspend fun getSearchDataByKey(
+        @Path("page") pageNo: Int,
+        @Query("k") searchKey: String
+    ): DataResponse<PageBean<Article>>
+
 
     companion object {
         const val BASE_URL = "https://www.wanandroid.com"

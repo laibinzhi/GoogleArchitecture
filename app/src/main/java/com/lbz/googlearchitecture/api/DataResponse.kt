@@ -21,5 +21,5 @@ data class PageBean<T>(
     @SerializedName("pageCount") val pageCount: Int,
     @SerializedName("size") val size: Int,
     @SerializedName("total") val total: Int,
-    @SerializedName("datas") val datas: List<T> = emptyList()
+    @SerializedName("datas") val datas: MutableList<T>
 )

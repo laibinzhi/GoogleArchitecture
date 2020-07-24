@@ -1,23 +1,25 @@
-package com.lbz.googlearchitecture.ui.home
+package com.lbz.googlearchitecture.ui.search
 
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blankj.utilcode.util.ConvertUtils
 import com.lbz.googlearchitecture.R
-import com.lbz.googlearchitecture.databinding.FragmentHomeBinding
+import com.lbz.googlearchitecture.data.search.SearchPagingSource
+import com.lbz.googlearchitecture.databinding.FragmentSearchResultBinding
 import com.lbz.googlearchitecture.ui.base.BaseFragment
 import com.lbz.googlearchitecture.ui.base.BaseLoadStateAdapter
-import com.lbz.googlearchitecture.ui.main.MainFragmentDirections
+import com.lbz.googlearchitecture.ui.home.ArticlesAdapter
 import com.lbz.googlearchitecture.widget.SpaceItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,23 +30,26 @@ import javax.inject.Inject
 
 /**
  * @author: laibinzhi
- * @date: 2020-07-15 08:41
+ * @date: 2020-07-23 17:59
  * @github: https://github.com/laibinzhi
  * @blog: https://www.laibinzhi.top/
  */
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(),
+class SearchResultFragment : BaseFragment<FragmentSearchResultBinding>(),
     SwipeRefreshLayout.OnRefreshListener {
 
+    private val args: SearchResultFragmentArgs by navArgs()
+
     @Inject
-    lateinit var iewModelFactoryArticle: ArticleViewModelFactory
-    private lateinit var viewModel: ArticlesitoriesViewModel
-    private val adapter = ArticlesAdapter(true)
+    lateinit var searchViewModelFactory: SearchViewModelFactory
+    private lateinit var viewModel: SearchViewModel
+    private val adapter = ArticlesAdapter(false)
     private var job: Job? = null
     private var isrefreshByHand: Boolean = false
 
-    override fun layoutId(): Int = R.layout.fragment_home
+
+    override fun layoutId() = R.layout.fragment_search_result
 
     override fun initView(savedInstanceState: Bundle?) {
         initToolbar()
@@ -54,43 +59,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
     }
 
     override fun lazyLoadData() {
-        viewModel = ViewModelProvider(this, iewModelFactoryArticle)
-            .get(ArticlesitoriesViewModel::class.java)
-        getArticles()
-        getBanner()
+        viewModel = ViewModelProvider(this, searchViewModelFactory)
+            .get(SearchViewModel::class.java)
+        getSearchResult()
     }
-
-    override fun createObserver() {
-
-    }
-
-    override fun onRefresh() {
-        isrefreshByHand = true
-        adapter.refresh()
-        viewModel.getBanner()
-    }
-
-    override fun initListener() {
-        binding.retryButton.setOnClickListener {
-            adapter.retry()
-            viewModel.getBanner()
-        }
-    }
-
 
     private fun initToolbar() {
         binding.toolbar.run {
-            title = getString(R.string.title_home)
-            inflateMenu(R.menu.home_menu)
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.home_search -> {
-                        val direction =
-                            MainFragmentDirections.actionFragmentMainToFragmentSearch()
-                        findNavController().navigate(direction)
-                    }
-                }
-                true
+            title = args.search
+            navigationIcon =
+                ContextCompat.getDrawable(context, R.drawable.ic_baseline_keyboard_backspace_24)
+            setNavigationOnClickListener {
+                findNavController().navigateUp()
             }
         }
     }
@@ -100,7 +80,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
             SpaceItemDecoration(
                 0,
                 ConvertUtils.dp2px(8f),
-                firstNeedTop = false
+                firstNeedTop = true
             )
         )
         binding.list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -145,11 +125,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
         )
         adapter.addLoadStateListener { loadState ->
 //            binding.list.isVisible = loadState.source.refresh is LoadState.NotLoading
+
+            var isEmpty = false//是否是空数据
+
+            if (loadState.refresh is LoadState.Error) {
+                val throwable = (loadState.refresh as LoadState.Error).error
+                if (throwable.message == SearchPagingSource.SEARCH_RESULT_EMPTY) {
+                    isEmpty = true
+                }
+            }
+            binding.list.isVisible = !isEmpty//第一页数据为空的时候，列表隐藏
+            binding.swipeRefreshLayout.isVisible = !isEmpty
+
             binding.swipeRefreshLayout.isRefreshing =
                 loadState.refresh is LoadState.Loading && isrefreshByHand
             binding.progressBar.isVisible =
                 loadState.refresh is LoadState.Loading && !isrefreshByHand
-            binding.retryButton.isVisible = loadState.refresh is LoadState.Error
+            binding.retryButton.isVisible =
+                loadState.refresh is LoadState.Error && !isEmpty
             val errorState = loadState.source.append as? LoadState.Error
                 ?: loadState.source.prepend as? LoadState.Error
                 ?: loadState.append as? LoadState.Error
@@ -161,29 +154,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
                     Toast.LENGTH_LONG
                 ).show()
             }
+            //空白布局
+            binding.emptyLayout.emptyLayoutRoot.isVisible = isEmpty
         }
     }
 
-
-    private fun getArticles() {
+    private fun getSearchResult() {
         job?.cancel()
         job = lifecycleScope.launch {
-            viewModel.getArticles().collectLatest {
+            viewModel.getSearchResult(args.search).collectLatest {
                 adapter.submitData(it)
             }
         }
     }
 
-    private fun getBanner() {
-        viewModel?.let { homeModel ->
-            homeModel.banner.observe(viewLifecycleOwner, Observer {
-                if (it.isNotEmpty()) {
-                    adapter.setBanner(it)
-                    adapter.notifyDataSetChanged()
-                }
-            })
-        }
-        viewModel.getBanner()
+    override fun createObserver() {
+
     }
 
+    override fun initListener() {
+        binding.retryButton.setOnClickListener {
+            adapter.retry()
+        }
+        binding.emptyLayout.emptyLayoutRetryBtn.setOnClickListener {
+            adapter.retry()
+        }
+    }
+
+    override fun onRefresh() {
+        isrefreshByHand = true
+        adapter.refresh()
+    }
 }

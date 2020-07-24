@@ -18,5 +18,7 @@
     <dimen name="dp_3">3dp</dimen>
     <dimen name="dp_14">14dp</dimen>
     <dimen name="banner_height">200dp</dimen>
+    <dimen name="dp_16">16dp</dimen>
+    <dimen name="dp_15">15dp</dimen>
 
 </resources>

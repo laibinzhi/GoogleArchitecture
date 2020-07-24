@@ -32,9 +32,11 @@ buildscript {
         version_magic_indicator = "1.5.0"
         version_glide = "4.8.0"
         version_utilcodex = "1.29.0"
-        version_debug_database ="1.0.6"
-        recyclerview_animators_version="3.0.0"
-        youth_banner_version= "2.1.0"
+        version_debug_database = "1.0.6"
+        recyclerview_animators_version = "3.0.0"
+        youth_banner_version = "2.1.0"
+        flexbox_version = "2.0.1"
+        material_dialog_version = "3.3.0"
     }
 
 
@@ -46,6 +48,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:$version_gradle"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$version_navigation"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
