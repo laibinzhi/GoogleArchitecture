@@ -1,6 +1,7 @@
 package com.lbz.googlearchitecture.ui.home
 
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lbz.googlearchitecture.model.Article
@@ -44,7 +45,7 @@ class ArticlesAdapter(private val isHome: Boolean) :
         return if (viewType == TYPE_BANNER) {
             BannerViewHolder.create(parent)
         } else {
-            ArticleViewHolder.create(parent)
+            ArticleViewHolder.create(parent, this.listener)
         }
     }
 
@@ -62,11 +63,25 @@ class ArticlesAdapter(private val isHome: Boolean) :
         if (holder is BannerViewHolder) {
             holder.bind(banners)
         } else {
-            val repoItem = getItem(position)
+            //因为在home中0这个position已经给了banner，所以position要减去1
+            val pos = if (isHome) (position - 1) else position
+            val repoItem = getItem(pos)
             if (repoItem != null) {
                 (holder as ArticleViewHolder).bind(repoItem)
             }
         }
     }
+
+    interface OnItemClickListener {
+        fun toDetail(data: Article)
+        fun collect(data: Article, imageView: ImageView)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
+    }
+
+    lateinit var listener: OnItemClickListener
+
 
 }

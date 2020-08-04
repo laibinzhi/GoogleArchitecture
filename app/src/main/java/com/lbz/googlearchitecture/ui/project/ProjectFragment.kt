@@ -1,10 +1,11 @@
 package com.lbz.googlearchitecture.ui.project
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lbz.googlearchitecture.R
@@ -14,7 +15,6 @@ import com.lbz.googlearchitecture.model.ProjectTitle
 import com.lbz.googlearchitecture.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import javax.inject.Inject
 
 /**
  * @author: laibinzhi
@@ -26,9 +26,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ProjectFragment : BaseFragment<FragmentProjectBinding>() {
 
-    @Inject
-    lateinit var projectViewModelFactory: ProjectViewModelFactory
-    private lateinit var viewModel: ProjectViewModel
+    private val viewModel: ProjectViewModel by viewModels()
+
     private var fragments: ArrayList<Fragment> = arrayListOf()
     private var mTitleList: ArrayList<ProjectTitle> = arrayListOf()
 
@@ -56,10 +55,9 @@ class ProjectFragment : BaseFragment<FragmentProjectBinding>() {
     }
 
     override fun createObserver() {
-        viewModel = ViewModelProvider(this, projectViewModelFactory)
-            .get(ProjectViewModel::class.java)
         viewModel.projectTitles.observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
+                Log.e("UserUpdate", "监听project title" + it.size)
                 binding.datalayout.visibility = View.VISIBLE
                 binding.retryButton.visibility = View.GONE
                 binding.progressBar.visibility = View.GONE
@@ -73,10 +71,11 @@ class ProjectFragment : BaseFragment<FragmentProjectBinding>() {
                 binding.viewPager.adapter?.notifyDataSetChanged()
                 binding.viewPager.offscreenPageLimit = fragments.size
             }
-
         })
 
         viewModel.status.observe(viewLifecycleOwner, Observer {
+            Log.e("UserUpdate", "监听project status" + it)
+
             when (it) {
                 ProjectStatus.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -95,6 +94,11 @@ class ProjectFragment : BaseFragment<FragmentProjectBinding>() {
                 }
             }
         })
+
+//        sharedViewModel.user.observe(viewLifecycleOwner, Observer {
+//            Log.e("UserUpdate", "在ProjectFragment观察it" + it)
+//        })
+
     }
 
     private fun getTabTitle(position: Int) = mTitleList[position].name

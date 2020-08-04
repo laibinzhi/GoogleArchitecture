@@ -9,9 +9,18 @@
         android:id="@+id/fragment_main"
         android:name="com.lbz.googlearchitecture.ui.main.MainFragment"
         tools:layout="@layout/fragment_main">
+
         <action
             android:id="@+id/action_fragment_main_to_fragment_search"
             app:destination="@id/fragment_search"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_fragment_main_to_fragment_login"
+            app:destination="@id/fragment_login"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -51,10 +60,23 @@
         android:name="com.lbz.googlearchitecture.ui.search.SearchResultFragment"
         tools:layout="@layout/fragment_search_result" >
 
+        <action
+            android:id="@+id/action_fragment_result_to_fragment_login"
+            app:destination="@id/fragment_login"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
         <argument
             android:name="search"
             app:argType="string" />
 
     </fragment>
+
+    <fragment
+        android:id="@+id/fragment_login"
+        android:name="com.lbz.googlearchitecture.ui.login.LoginFragment"
+        tools:layout="@layout/fragment_login" />
 
 </navigation>

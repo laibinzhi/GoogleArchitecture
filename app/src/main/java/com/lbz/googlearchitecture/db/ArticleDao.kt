@@ -2,10 +2,7 @@ package com.lbz.googlearchitecture.db
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.lbz.googlearchitecture.model.Article
 import com.lbz.googlearchitecture.model.Banner
 
@@ -42,4 +39,9 @@ interface ArticleDao {
     @Query("DELETE FROM banner")
     suspend fun clearBanner()
 
+    @Query("UPDATE articles SET collect =:collect WHERE id =:id")
+    suspend fun updateArticleCollect(id: Int, collect: Boolean)
+
+    @Query("UPDATE articles SET collect =:collect")
+    suspend fun updateAllArticleUnCollect(collect: Boolean)
 }

@@ -17,71 +17,71 @@ import com.lbz.googlearchitecture.utils.TagTypeConverter
 @TypeConverters(TagTypeConverter::class)
 data class Article(
     @PrimaryKey(autoGenerate = true)
-    val databaseId: Int,
+    var databaseId: Int,
     @field:SerializedName("id")
-    val id: Int,
+    var id: Int,
     @field:SerializedName("title")
-    val title: String,
+    var title: String,
     @field:SerializedName("apkLink")
-    val apkLink: String,
+    var apkLink: String,
     @field:SerializedName("audit")
-    val audit: Int,
+    var audit: Int,
     @field:SerializedName("author")
-    val author: String,
+    var author: String,
     @field:SerializedName("canEdit")
-    val canEdit: Boolean,
+    var canEdit: Boolean,
     @field:SerializedName("chapterId")
-    val chapterId: Int,
+    var chapterId: Int,
     @field:SerializedName("chapterName")
-    val chapterName: String,
+    var chapterName: String,
     @field:SerializedName("collect")
-    val collect: Boolean,
+    var collect: Boolean,
     @field:SerializedName("courseId")
-    val courseId: Int,
+    var courseId: Int,
     @field:SerializedName("desc")
-    val desc: String,
+    var desc: String,
     @field:SerializedName("descMd")
-    val descMd: String,
+    var descMd: String,
     @field:SerializedName("envelopePic")
-    val envelopePic: String,
+    var envelopePic: String,
     @field:SerializedName("fresh")
-    val fresh: Boolean,
+    var fresh: Boolean,
     @field:SerializedName("link")
-    val link: String,
+    var link: String,
     @field:SerializedName("niceDate")
-    val niceDate: String,
+    var niceDate: String,
     @field:SerializedName("niceShareDate")
-    val niceShareDate: String,
+    var niceShareDate: String,
     @field:SerializedName("origin")
-    val origin: String,
+    var origin: String,
     @field:SerializedName("prefix")
-    val prefix: String,
+    var prefix: String,
     @field:SerializedName("projectLink")
-    val projectLink: String,
+    var projectLink: String,
     @field:SerializedName("publishTime")
-    val publishTime: Long,
+    var publishTime: Long,
     @field:SerializedName("realSuperChapterId")
-    val realSuperChapterId: Int,
+    var realSuperChapterId: Int,
     @field:SerializedName("selfVisible")
-    val selfVisible: Int,
+    var selfVisible: Int,
     @field:SerializedName("shareDate")
-    val shareDate: Long,
+    var shareDate: Long,
     @field:SerializedName("shareUser")
-    val shareUser: String,
+    var shareUser: String,
     @field:SerializedName("superChapterId")
-    val superChapterId: Int,
+    var superChapterId: Int,
     @field:SerializedName("superChapterName")
-    val superChapterName: String,
+    var superChapterName: String,
     @field:SerializedName("type")
-    val type: Int,
+    var type: Int,
     @field:SerializedName("userId")
-    val userId: Int,
+    var userId: Int,
     @field:SerializedName("visible")
-    val visible: Int,
+    var visible: Int,
     @field:SerializedName("zan")
-    val zan: Int,
+    var zan: Int,
     @field:SerializedName("tags")
-    val tags: List<Tags>
+    var tags: List<Tags>
 ) {
     override fun toString(): String {
         return "Article(id=$id, title='$title', apkLink='$apkLink', audit=$audit, author='$author', canEdit=$canEdit, chapterId=$chapterId, chapterName='$chapterName', collect=$collect, courseId=$courseId, desc='$desc', descMd='$descMd', envelopePic='$envelopePic', fresh=$fresh, link='$link', niceDate='$niceDate', niceShareDate='$niceShareDate', origin='$origin', prefix='$prefix', projectLink='$projectLink', publishTime=$publishTime, realSuperChapterId=$realSuperChapterId, selfVisible=$selfVisible, shareDate=$shareDate, shareUser='$shareUser', superChapterId=$superChapterId, superChapterName='$superChapterName', type=$type, userId=$userId, visible=$visible, zan=$zan)"

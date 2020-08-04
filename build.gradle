@@ -37,6 +37,9 @@ buildscript {
         youth_banner_version = "2.1.0"
         flexbox_version = "2.0.1"
         material_dialog_version = "3.3.0"
+
+        fragment_ktx_version = "1.2.5"
+        mmkv_static_version = "1.2.1"
     }
 
 

@@ -20,6 +20,7 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -141,13 +142,14 @@
                     tools:text="分类·项目" />
 
                 <ImageView
+
                     android:id="@+id/item_home_collect"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="8dp"
-                    android:src="@drawable/ic_baseline_favorite_24" />
+                    android:src="@{article.collect?@drawable/ic_baseline_favorite_24:@drawable/ic_baseline_un_favorite_24}" />
 
             </RelativeLayout>
 

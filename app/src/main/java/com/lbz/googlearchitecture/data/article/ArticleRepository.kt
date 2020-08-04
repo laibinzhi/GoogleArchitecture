@@ -75,6 +75,18 @@ class ArticleRepository @Inject constructor(
         }
     }
 
+    suspend fun updateArticleCollectStatus(id: Int, collect: Boolean) {
+        withContext(Dispatchers.IO) {
+            database.articleDao().updateArticleCollect(id, collect)
+        }
+    }
+
+    suspend fun updateAllArticleUnCollect() {
+        withContext(Dispatchers.IO) {
+            database.articleDao().updateAllArticleUnCollect(false)
+        }
+    }
+
     companion object {
         private const val NETWORK_PAGE_SIZE = 30
     }

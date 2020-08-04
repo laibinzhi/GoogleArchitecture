@@ -2,6 +2,7 @@ package com.lbz.googlearchitecture.ui.project
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.lbz.googlearchitecture.databinding.ProjectDataItemLayoutBinding
@@ -29,10 +30,19 @@ class ProjectDataAdapter :
     }
 
 
-    class ViewHolder(val binding: ProjectDataItemLayoutBinding) :
+    class ViewHolder(val binding: ProjectDataItemLayoutBinding, val listener: OnItemClickListener) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ProjectData?) {
-            binding.project = item
+            item?.let {
+                binding.project = item
+                binding.rootView.setOnClickListener {
+                    listener.toDetail(item)
+                }
+                binding.itemProjectCollect.setOnClickListener {
+                    listener.collect(item, it as ImageView)
+                }
+            }
+
         }
     }
 
@@ -42,12 +52,24 @@ class ProjectDataAdapter :
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ), listener
         )
     }
 
     override fun funBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
+
+    interface OnItemClickListener {
+        fun toDetail(data: ProjectData)
+        fun collect(data: ProjectData, imageView: ImageView)
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
+    }
+
+    lateinit var listener: OnItemClickListener
+
 
 }

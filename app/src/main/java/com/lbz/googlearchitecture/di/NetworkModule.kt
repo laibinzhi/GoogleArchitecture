@@ -1,11 +1,16 @@
 package com.lbz.googlearchitecture.di
 
+import android.content.Context
+import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.lbz.googlearchitecture.api.LbzService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -33,8 +38,8 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor) = OkHttpClient.Builder()
-        .addInterceptor(httpLoggingInterceptor)
+    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor,@ApplicationContext context: Context) = OkHttpClient.Builder()
+        .addInterceptor(httpLoggingInterceptor).cookieJar(PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context)))
         .build()
 
     @Provides

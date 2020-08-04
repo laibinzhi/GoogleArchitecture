@@ -61,6 +61,7 @@ dependencies {
 
     // architecture components
     implementation "androidx.core:core-ktx:$coreVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
@@ -68,6 +69,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
     implementation "androidx.paging:paging-runtime:$pagingVersion"
+    implementation 'androidx.annotation:annotation:1.1.0'
     debugImplementation 'com.idescout.sql:sqlscout-server:4.1'
     kapt "androidx.room:room-compiler:$roomVersion"
 
@@ -126,6 +128,9 @@ dependencies {
     implementation "com.afollestad.material-dialogs:color:$material_dialog_version"
     implementation "com.afollestad.material-dialogs:datetime:$material_dialog_version"
     implementation "com.afollestad.material-dialogs:bottomsheets:$material_dialog_version"
+
+    implementation "com.tencent:mmkv-static:$mmkv_static_version"
+    api 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
 
 
 }

@@ -53,9 +53,9 @@ class MainFragment : Fragment() {
     private fun initBottomNavigationView() {
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
-                R.id.fragment_home -> binding.viewpager2.currentItem = 0
-                R.id.fragment_project -> binding.viewpager2.currentItem = 1
-                R.id.fragment_mine -> binding.viewpager2.currentItem = 2
+                R.id.fragment_home -> binding.viewpager2.setCurrentItem(0,false)
+                R.id.fragment_project -> binding.viewpager2.setCurrentItem(1,false)
+                R.id.fragment_mine -> binding.viewpager2.setCurrentItem(2,false)
             }
             true
         }

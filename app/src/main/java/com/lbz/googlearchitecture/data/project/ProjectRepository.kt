@@ -83,6 +83,26 @@ class ProjectRepository @Inject constructor(
         ).flow
     }
 
+    suspend fun updateProjectCollectStatus(id: Int, collect: Boolean) {
+        withContext(Dispatchers.IO) {
+            try {
+                database.projectDao().updateProjectCollect(id, collect)
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
+    suspend fun updateAllProjectUnCollect() {
+        withContext(Dispatchers.IO) {
+            try {
+                database.projectDao().updateAllProjectUnCollect(false)
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+        }
+    }
+
     companion object {
         private const val NETWORK_PAGE_SIZE = 15
     }

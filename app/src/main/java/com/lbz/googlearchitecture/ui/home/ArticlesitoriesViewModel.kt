@@ -1,6 +1,7 @@
 package com.lbz.googlearchitecture.ui.home
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -27,6 +28,18 @@ class ArticlesitoriesViewModel @ViewModelInject constructor(private val reposito
     fun getBanner() {
         viewModelScope.launch {
             repository.getBanner()
+        }
+    }
+
+    fun updateArticleCollectStatus(id:Int,collect:Boolean){
+        viewModelScope.launch {
+            repository.updateArticleCollectStatus(id,collect)
+        }
+    }
+
+    fun updateAllArticleUnCollect(){
+        viewModelScope.launch {
+            repository.updateAllArticleUnCollect()
         }
     }
 

@@ -5,9 +5,11 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
@@ -20,6 +22,7 @@ import com.lbz.googlearchitecture.model.Hotkey
 import com.lbz.googlearchitecture.model.SearchHistory
 import com.lbz.googlearchitecture.ui.MainActivity
 import com.lbz.googlearchitecture.ui.base.BaseFragment
+import com.lbz.googlearchitecture.ui.home.ArticlesitoriesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
@@ -34,9 +37,12 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
-    @Inject
-    lateinit var searchViewModelFactory: SearchViewModelFactory
-    private lateinit var viewModel: SearchViewModel
+//    @Inject
+//    lateinit var searchViewModelFactory: SearchViewModelFactory
+//    private lateinit var viewModel: SearchViewModel
+
+    private val viewModel: SearchViewModel by viewModels()
+
 
     private val hotKeyAdapter: SearcHotKeyAdapter by lazy { SearcHotKeyAdapter(arrayListOf()) }
 
@@ -51,14 +57,14 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     }
 
     override fun createObserver() {
-        viewModel = ViewModelProvider(this, searchViewModelFactory)
-            .get(SearchViewModel::class.java)
+//        viewModel = ViewModelProvider(this, searchViewModelFactory)
+//            .get(SearchViewModel::class.java)
         viewModel.hotkeys.observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
                 hotKeyAdapter.setData(it)
             }
         })
-        viewModel.searchHistory.observe(this, Observer {
+        viewModel.searchHistory.observe(viewLifecycleOwner, Observer {
             historyAdapter.setData(it)
         })
     }
@@ -88,7 +94,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     private fun initToolbar() {
         setHasOptionsMenu(true)
         (activity as MainActivity).setSupportActionBar(binding.toolbar)
-        binding.toolbar.setNavigationIcon(R.drawable.ic_baseline_keyboard_backspace_24)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        binding.toolbar.setNavigationIcon(R.drawable.ic_baseline_keyboard_backspace_24)
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }

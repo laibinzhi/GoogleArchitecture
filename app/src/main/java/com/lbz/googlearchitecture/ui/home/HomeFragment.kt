@@ -2,29 +2,33 @@ package com.lbz.googlearchitecture.ui.home
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.lbz.googlearchitecture.R
 import com.lbz.googlearchitecture.databinding.FragmentHomeBinding
+import com.lbz.googlearchitecture.model.Article
 import com.lbz.googlearchitecture.ui.base.BaseFragment
 import com.lbz.googlearchitecture.ui.base.BaseLoadStateAdapter
 import com.lbz.googlearchitecture.ui.main.MainFragmentDirections
+import com.lbz.googlearchitecture.utils.CacheUtil
 import com.lbz.googlearchitecture.widget.SpaceItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * @author: laibinzhi
@@ -37,9 +41,8 @@ import javax.inject.Inject
 class HomeFragment : BaseFragment<FragmentHomeBinding>(),
     SwipeRefreshLayout.OnRefreshListener {
 
-    @Inject
-    lateinit var iewModelFactoryArticle: ArticleViewModelFactory
-    private lateinit var viewModel: ArticlesitoriesViewModel
+    private val viewModel: ArticlesitoriesViewModel by viewModels()
+
     private val adapter = ArticlesAdapter(true)
     private var job: Job? = null
     private var isrefreshByHand: Boolean = false
@@ -54,14 +57,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
     }
 
     override fun lazyLoadData() {
-        viewModel = ViewModelProvider(this, iewModelFactoryArticle)
-            .get(ArticlesitoriesViewModel::class.java)
+//        viewModel = ViewModelProvider(this, iewModelFactoryArticle)
+//            .get(ArticlesitoriesViewModel::class.java)
         getArticles()
         getBanner()
     }
 
     override fun createObserver() {
-
+//        sharedViewModel.user.observe(viewLifecycleOwner, Observer {
+//            Log.e("UserUpdate", "在HomeFragment观察it:$it")
+//            if (it != null) {
+//                it.collectIds.forEach { id ->
+//                    viewModel.updateArticleCollectStatus(id, true)
+//                }
+//            } else {
+//                viewModel.updateAllArticleUnCollect()
+//                adapter.notifyDataSetChanged()
+//            }
+//        })
     }
 
     override fun onRefresh() {
@@ -75,6 +88,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
             adapter.retry()
             viewModel.getBanner()
         }
+        adapter.setOnItemClickListener(object : ArticlesAdapter.OnItemClickListener {
+
+            override fun toDetail(data: Article) {
+                ToastUtils.showShort("打开url" + data.link)
+            }
+
+            override fun collect(data: Article, imageView: ImageView) {
+                if (CacheUtil.isLogin()) {
+                    ToastUtils.showShort("点赞")
+                } else {
+                    val direction =
+                        MainFragmentDirections
+                            .actionFragmentMainToFragmentLogin()
+                    findNavController().navigate(direction)
+                }
+            }
+
+        })
     }
 
 
@@ -185,5 +216,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
         }
         viewModel.getBanner()
     }
+
 
 }

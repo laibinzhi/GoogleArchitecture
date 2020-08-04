@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import com.blankj.utilcode.util.KeyboardUtils
 
@@ -17,6 +18,8 @@ import com.blankj.utilcode.util.KeyboardUtils
  * @blog: https://www.laibinzhi.top/
  */
 abstract class BaseFragment<DB : ViewDataBinding> : Fragment() {
+
+    val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var isFirst: Boolean = true
 
@@ -37,6 +40,7 @@ abstract class BaseFragment<DB : ViewDataBinding> : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView(savedInstanceState)
         initListener()
+        createObserver()
         onVisible()
         initData()
     }
@@ -54,7 +58,6 @@ abstract class BaseFragment<DB : ViewDataBinding> : Fragment() {
 
     private fun onVisible() {
         if (lifecycle.currentState == Lifecycle.State.STARTED && isFirst) {
-            createObserver()
             lazyLoadData()
             isFirst = false
         }

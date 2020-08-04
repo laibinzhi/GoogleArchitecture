@@ -2,10 +2,7 @@ package com.lbz.googlearchitecture.api
 
 import com.lbz.googlearchitecture.model.*
 import kotlinx.coroutines.Deferred
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 /**
  * @author: laibinzhi
@@ -42,6 +39,15 @@ interface LbzService {
         @Query("k") searchKey: String
     ): DataResponse<PageBean<Article>>
 
+    @FormUrlEncoded
+    @POST("/user/login")
+    fun login(
+        @Field("username") username: String,
+        @Field("password") pwd: String
+    ): Deferred<DataResponse<User>>
+
+    @GET("/user/logout/json")
+    fun logout(): Deferred<DataResponse<User>>
 
     companion object {
         const val BASE_URL = "https://www.wanandroid.com"

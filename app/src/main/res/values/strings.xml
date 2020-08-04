@@ -24,4 +24,15 @@
     <string name="delete_search_history_dialog_message">确定清空吗?</string>
     <string name="delete_search_history_dialog_negative_btn_text">取消</string>
     <string name="delete_search_history_dialog_positive_btn_text">清空</string>
+    <string name="my_integral">我的积分</string>
+    <string name="current_integral">当前积分:</string>
+    <string name="my_collect">我的收藏</string>
+    <string name="my_article">我的文章</string>
+    <string name="open_source_web">开源网站</string>
+    <string name="system_setting">系统设置</string>
+    <string name="not_login_display_name">请先登录~</string>
+    <string name="login">登录</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_page_register_tips">没有账号？点击注册</string>
 </resources>

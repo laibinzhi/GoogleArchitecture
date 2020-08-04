@@ -6,7 +6,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.lbz.googlearchitecture.model.Article
 import com.lbz.googlearchitecture.model.ProjectData
 import com.lbz.googlearchitecture.model.ProjectTitle
 
@@ -43,5 +42,11 @@ interface ProjectDao {
 
     @Query("DELETE FROM project_data WHERE chapterId = :cid")
     suspend fun clearLocalProjectDataByCid(cid: Int)
+
+    @Query("UPDATE project_data SET collect =:collect WHERE id =:id")
+    suspend fun updateProjectCollect(id: Int, collect: Boolean)
+
+    @Query("UPDATE project_data SET collect =:collect")
+    suspend fun updateAllProjectUnCollect(collect: Boolean)
 
 }

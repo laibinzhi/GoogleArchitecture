@@ -2,26 +2,31 @@ package com.lbz.googlearchitecture.ui.project
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blankj.utilcode.util.ConvertUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.lbz.googlearchitecture.R
 import com.lbz.googlearchitecture.databinding.FragmentOneProjectBinding
+import com.lbz.googlearchitecture.model.ProjectData
 import com.lbz.googlearchitecture.ui.base.BaseFragment
 import com.lbz.googlearchitecture.ui.base.BaseLoadStateAdapter
+import com.lbz.googlearchitecture.ui.main.MainFragmentDirections
+import com.lbz.googlearchitecture.utils.CacheUtil
 import com.lbz.googlearchitecture.widget.SpaceItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * @author: laibinzhi
@@ -37,16 +42,14 @@ const val CID_BUNDLE_KEY: String = "cid"
 class OneProjectFragment : BaseFragment<FragmentOneProjectBinding>(),
     SwipeRefreshLayout.OnRefreshListener {
 
-    @Inject
-    lateinit var projectViewModelFactory: ProjectViewModelFactory
-    private lateinit var viewModel: ProjectViewModel
+    private val viewModel: ProjectViewModel by viewModels()
+
     private val adapter = ProjectDataAdapter()
     private var searchJob: Job? = null
     private var isrefreshByHand: Boolean = false
     private var cid: Int = 294
 
     override fun layoutId() = R.layout.fragment_one_project
-
 
     override fun initView(savedInstanceState: Bundle?) {
         arguments?.let {
@@ -58,13 +61,23 @@ class OneProjectFragment : BaseFragment<FragmentOneProjectBinding>(),
     }
 
     override fun lazyLoadData() {
-        viewModel = ViewModelProvider(this, projectViewModelFactory)
-            .get(ProjectViewModel::class.java)
         getProject()
     }
 
     override fun createObserver() {
-
+//        sharedViewModel.run {
+//            user.observe(viewLifecycleOwner, Observer {
+//                Log.e("UserUpdate", "在OneProjectFragment观察it:$it cid:$cid")
+//                if (it != null) {
+//                    it.collectIds.forEach { id ->
+//                        viewModel.updateProjectCollectStatus(id, true)
+//                    }
+//                } else {
+//                    viewModel.updateAllProjectUnCollect()
+//                    adapter.notifyDataSetChanged()
+//                }
+//            })
+//        }
     }
 
     override fun onRefresh() {
@@ -96,6 +109,23 @@ class OneProjectFragment : BaseFragment<FragmentOneProjectBinding>(),
             binding.list.scrollToPosition(0)
             binding.fab.visibility = View.INVISIBLE
         }
+        adapter.setOnItemClickListener(object : ProjectDataAdapter.OnItemClickListener {
+            override fun toDetail(data: ProjectData) {
+                ToastUtils.showShort("打开url" + data.link)
+            }
+
+            override fun collect(data: ProjectData, imageView: ImageView) {
+                if (CacheUtil.isLogin()) {
+                    ToastUtils.showShort("点赞")
+                } else {
+                    val direction =
+                        MainFragmentDirections
+                            .actionFragmentMainToFragmentLogin()
+                    findNavController().navigate(direction)
+                }
+            }
+
+        })
     }
 
     private fun initSwipeRefreshLayout() {
@@ -140,6 +170,7 @@ class OneProjectFragment : BaseFragment<FragmentOneProjectBinding>(),
             }
         }
     }
+
 
     companion object {
         fun newInstance(cid: Int): OneProjectFragment {

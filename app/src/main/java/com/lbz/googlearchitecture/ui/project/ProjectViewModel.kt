@@ -38,6 +38,18 @@ class ProjectViewModel @ViewModelInject constructor(private val repository: Proj
         repository.getProjectDataStream(cid)
             .cachedIn(viewModelScope)
 
+    fun updateProjectCollectStatus(id:Int,collect:Boolean){
+        viewModelScope.launch {
+            repository.updateProjectCollectStatus(id,collect)
+        }
+    }
+
+    fun updateAllProjectUnCollect(){
+        viewModelScope.launch {
+            repository.updateAllProjectUnCollect()
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
