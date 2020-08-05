@@ -12,6 +12,7 @@ import com.lbz.googlearchitecture.api.PageBean
 import com.lbz.googlearchitecture.db.LbzDatabase
 import com.lbz.googlearchitecture.db.RemoteKeys
 import com.lbz.googlearchitecture.model.Article
+import com.lbz.googlearchitecture.model.ArticleType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
@@ -32,7 +33,8 @@ private const val TAG = "ArticleRemoteMediator"
 @OptIn(ExperimentalPagingApi::class)
 class ArticleRemoteMediator(
     private val service: LbzService,
-    private val database: LbzDatabase
+    private val database: LbzDatabase,
+    private val articleType: Int
 ) : RemoteMediator<Int, Article>() {
 
     override suspend fun load(
@@ -62,7 +64,7 @@ class ArticleRemoteMediator(
         var localArticleSize = 0 //本地数据库数据大小
 
         database.withTransaction {
-            localArticleSize = database.articleDao().getLocalArticleSize()
+            localArticleSize = database.articleDao().getLocalArticleSize(articleType)
         }
 
         try {
@@ -70,17 +72,25 @@ class ArticleRemoteMediator(
 //            val apiResponse = service.getArticles(page)
 //            val articles = apiResponse.data.datas
 
-            val articles = getHomeArticleAndTopArticle(page).data.datas
+            val articles = getArticleFromNet(page).data.datas
+            articles.forEach {
+                it.articleType = articleType
+            }
             val endOfPaginationReached = articles.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    database.remoteKeysDao().clearRemoteKeys()
-                    database.articleDao().clearArticles()
+                    database.remoteKeysDao().clearRemoteKeys(articleType)
+                    database.articleDao().clearArticlesByType(articleType)
                 }
                 val prevKey = if (page == ARTICLE_STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val keys = articles.map {
-                    RemoteKeys(articleId = it.id, prevKey = prevKey, nextKey = nextKey)
+                    RemoteKeys(
+                        articleId = it.id,
+                        prevKey = prevKey,
+                        nextKey = nextKey,
+                        articleType = articleType
+                    )
                 }
                 database.remoteKeysDao().insertAll(keys)
                 database.articleDao().insertAll(articles)
@@ -112,14 +122,14 @@ class ArticleRemoteMediator(
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, Article>): RemoteKeys? {
         return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { repo ->
-                database.remoteKeysDao().remoteKeysArticleId(repo.id)
+                database.remoteKeysDao().remoteKeysArticleId(repo.id, articleType)
             }
     }
 
     private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, Article>): RemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { repo ->
-                database.remoteKeysDao().remoteKeysArticleId(repo.id)
+                database.remoteKeysDao().remoteKeysArticleId(repo.id, articleType)
             }
     }
 
@@ -128,19 +138,36 @@ class ArticleRemoteMediator(
     ): RemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { repoId ->
-                database.remoteKeysDao().remoteKeysArticleId(repoId)
+                database.remoteKeysDao().remoteKeysArticleId(repoId, articleType)
             }
         }
     }
 
-    private suspend fun getHomeArticleAndTopArticle(page: Int): DataResponse<PageBean<Article>> {
+    private suspend fun getArticleFromNet(page: Int): DataResponse<PageBean<Article>> {
         return withContext(Dispatchers.IO) {
-            val data = async { service.getArticles(page) }
+            val data = async {
+                when (articleType) {
+                    ArticleType.HOME_ARTICLE -> {
+                        service.getArticles(page)
+                    }
+                    ArticleType.PLAZA_ARTICLE -> {
+                        service.getSquareData(page)
+                    }
+                    ArticleType.ASK_ARTICLE -> {
+                        service.getAskData(page)
+                    }
+                    else -> {
+                        service.getArticles(page)
+                    }
+                }
+            }
             Log.e(TAG, "获取正常列表size:" + data.await().data.datas.size)
             if (page == 0) {
-                val topData = async { service.getTopArticlesAsync() }
-                Log.e(TAG, "获取置顶列表size:" + topData.await().data.size)
-                data.await().data.datas.addAll(0, topData.await().data)
+                if (articleType == ArticleType.HOME_ARTICLE) {
+                    val topData = async { service.getTopArticlesAsync() }
+                    Log.e(TAG, "获取置顶列表size:" + topData.await().data.size)
+                    data.await().data.datas.addAll(0, topData.await().data)
+                }
                 Log.e(TAG, "最后获取大小:" + data.await().data.datas.size)
                 data.await()
             } else {

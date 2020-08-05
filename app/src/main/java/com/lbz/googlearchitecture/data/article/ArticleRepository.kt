@@ -9,6 +9,7 @@ import androidx.paging.PagingData
 import com.lbz.googlearchitecture.api.LbzService
 import com.lbz.googlearchitecture.db.LbzDatabase
 import com.lbz.googlearchitecture.model.Article
+import com.lbz.googlearchitecture.model.ArticleType
 import com.lbz.googlearchitecture.model.Banner
 import com.lbz.googlearchitecture.utils.CollectionUtil
 import kotlinx.coroutines.Dispatchers
@@ -31,9 +32,12 @@ class ArticleRepository @Inject constructor(
     private val database: LbzDatabase
 ) {
 
-    private val pagingSourceFactory = { database.articleDao().getLocalArticles() }
+    private var _articleType: Int = 0
 
-    fun getArticles(): Flow<PagingData<Article>> {
+    private val pagingSourceFactory = { database.articleDao().getLocalArticles(_articleType) }
+
+    fun getArticles(articleType: Int): Flow<PagingData<Article>> {
+        _articleType = articleType
         return Pager(
             config = PagingConfig(
                 pageSize = NETWORK_PAGE_SIZE,
@@ -42,7 +46,8 @@ class ArticleRepository @Inject constructor(
             ),
             remoteMediator = ArticleRemoteMediator(
                 service,
-                database
+                database,
+                articleType
             ),
             pagingSourceFactory = pagingSourceFactory
         ).flow

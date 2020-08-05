@@ -5,6 +5,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.lbz.googlearchitecture.ui.home.HomeFragment
 import com.lbz.googlearchitecture.ui.mine.MineFragment
 import com.lbz.googlearchitecture.ui.project.ProjectFragment
+import com.lbz.googlearchitecture.ui.square.SquareFragment
 
 /**
  * @author: laibinzhi
@@ -15,7 +16,8 @@ import com.lbz.googlearchitecture.ui.project.ProjectFragment
 
 const val HOME_PAGE_INDEX = 0
 const val PROJECT_PAGE_INDEX = 1
-const val MINE_PAGE_INDEX = 2
+const val SQUARE_PAGE_INDEX = 2
+const val MINE_PAGE_INDEX = 3
 
 
 class MainViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
@@ -23,6 +25,7 @@ class MainViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) 
     private val bottomNavigationViewFragmentCreators: Map<Int, () -> Fragment> = mapOf(
         HOME_PAGE_INDEX to { HomeFragment() },
         PROJECT_PAGE_INDEX to { ProjectFragment() },
+        SQUARE_PAGE_INDEX to { SquareFragment() },
         MINE_PAGE_INDEX to { MineFragment() }
     )
 

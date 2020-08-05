@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.lbz.googlearchitecture.model.Article
+import com.lbz.googlearchitecture.model.ArticleType
 import com.lbz.googlearchitecture.model.Banner
 
 /**
@@ -17,14 +18,14 @@ interface ArticleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(articles: List<Article>)
 
-    @Query("SELECT * FROM articles ")
-    fun getLocalArticles(): PagingSource<Int, Article>
+    @Query("SELECT * FROM articles WHERE articleType =:articleType")
+    fun getLocalArticles(articleType: Int): PagingSource<Int, Article>
 
-    @Query("SELECT COUNT(*) FROM articles")
-    fun getLocalArticleSize(): Int
+    @Query("SELECT COUNT(*) FROM articles WHERE articleType=:articleType")
+    fun getLocalArticleSize(articleType: Int): Int
 
-    @Query("DELETE FROM articles")
-    suspend fun clearArticles()
+    @Query("DELETE FROM articles WHERE articleType =:articleType")
+    suspend fun clearArticlesByType(articleType: Int)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBanner(banners: List<Banner>)

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.lbz.googlearchitecture.model.ArticleType
 
 /**
  * @author: laibinzhi
@@ -17,10 +18,10 @@ interface RemoteKeysDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(remoteKey: List<RemoteKeys>)
 
-    @Query("SELECT * FROM remote_keys WHERE articleId = :articleId")
-    suspend fun remoteKeysArticleId(articleId: Int): RemoteKeys?
+    @Query("SELECT * FROM remote_keys WHERE articleId = :articleId AND articleType =:articleType")
+    suspend fun remoteKeysArticleId(articleId: Int, articleType: Int): RemoteKeys?
 
-    @Query("DELETE FROM remote_keys")
-    suspend fun clearRemoteKeys()
+    @Query("DELETE FROM remote_keys WHERE articleType =:articleType")
+    suspend fun clearRemoteKeys(articleType: Int)
 }
 

@@ -2,6 +2,7 @@ package com.lbz.googlearchitecture.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.lbz.googlearchitecture.model.ArticleType
 
 /**
  * @author: laibinzhi
@@ -12,6 +13,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "remote_keys")
 data class RemoteKeys(
     @PrimaryKey val articleId: Int,
+    val articleType: Int,
     val prevKey: Int?,
     val nextKey: Int?
 )

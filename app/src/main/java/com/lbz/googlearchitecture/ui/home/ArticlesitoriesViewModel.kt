@@ -8,6 +8,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.lbz.googlearchitecture.data.article.ArticleRepository
 import com.lbz.googlearchitecture.model.Article
+import com.lbz.googlearchitecture.model.ArticleType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ import kotlinx.coroutines.launch
 class ArticlesitoriesViewModel @ViewModelInject constructor(private val repository: ArticleRepository) :
     ViewModel() {
 
-    fun getArticles(): Flow<PagingData<Article>> = repository.getArticles()
+    fun getArticles(): Flow<PagingData<Article>> = repository.getArticles(ArticleType.HOME_ARTICLE)
         .cachedIn(viewModelScope)
 
     fun getBanner() {
@@ -31,13 +32,13 @@ class ArticlesitoriesViewModel @ViewModelInject constructor(private val reposito
         }
     }
 
-    fun updateArticleCollectStatus(id:Int,collect:Boolean){
+    fun updateArticleCollectStatus(id: Int, collect: Boolean) {
         viewModelScope.launch {
-            repository.updateArticleCollectStatus(id,collect)
+            repository.updateArticleCollectStatus(id, collect)
         }
     }
 
-    fun updateAllArticleUnCollect(){
+    fun updateAllArticleUnCollect() {
         viewModelScope.launch {
             repository.updateAllArticleUnCollect()
         }

@@ -17,12 +17,31 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
-                style="@style/projectTablayoutStyle"
+            <FrameLayout
+                android:id="@+id/viewpager_linear"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:tabMode="scrollable" />
+                android:background="@color/colorPrimary"
+                android:padding="2dp">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/include_viewpager_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:theme="@style/AppBarOverlay"
+                    app:contentInsetStart="0dp"
+                    app:popupTheme="@style/PopupOverlay" />
+
+                <net.lucode.hackware.magicindicator.MagicIndicator
+                    android:id="@+id/magic_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp" />
+
+            </FrameLayout>
+
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager"

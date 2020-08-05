@@ -18,6 +18,7 @@ import com.lbz.googlearchitecture.utils.TagTypeConverter
 data class Article(
     @PrimaryKey(autoGenerate = true)
     var databaseId: Int,
+    var articleType: Int,
     @field:SerializedName("id")
     var id: Int,
     @field:SerializedName("title")

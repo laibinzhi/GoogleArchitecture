@@ -49,6 +49,12 @@ interface LbzService {
     @GET("/user/logout/json")
     fun logout(): Deferred<DataResponse<User>>
 
+    @GET("/user_article/list/{page}/json")
+    suspend fun getSquareData(@Path("page") page: Int): DataResponse<PageBean<Article>>
+
+    @GET("/wenda/list/{page}/json")
+    suspend fun getAskData(@Path("page") page: Int): DataResponse<PageBean<Article>>
+
     companion object {
         const val BASE_URL = "https://www.wanandroid.com"
     }

@@ -1,20 +1,15 @@
-package com.lbz.googlearchitecture.ui.project
+package com.lbz.googlearchitecture.ui.square
 
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.lbz.googlearchitecture.R
-import com.lbz.googlearchitecture.data.project.ProjectStatus
 import com.lbz.googlearchitecture.databinding.FragmentViewpagerBinding
-import com.lbz.googlearchitecture.model.ProjectTitle
 import com.lbz.googlearchitecture.ui.base.BaseFragment
 import com.lbz.googlearchitecture.widget.ScaleTransitionPagerTitleView
 import com.lbz.googlearchitecture.widget.ViewPager2Helper
@@ -29,85 +24,34 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
 
 /**
  * @author: laibinzhi
- * @date: 2020-07-15 11:44
+ * @date: 2020-08-04 10:52
  * @github: https://github.com/laibinzhi
  * @blog: https://www.laibinzhi.top/
  */
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class ProjectFragment : BaseFragment<FragmentViewpagerBinding>() {
+class SquareFragment :BaseFragment<FragmentViewpagerBinding>(){
 
-    private val viewModel: ProjectViewModel by viewModels()
+    var mTitleList = arrayListOf("广场", "每日一问", "体系", "导航")
 
     private var fragments: ArrayList<Fragment> = arrayListOf()
-    private var mTitleList: ArrayList<ProjectTitle> = arrayListOf()
+
+    init {
+        fragments.add(PlazaFragment())
+        fragments.add(AskFragment())
+        fragments.add(SystemFragment())
+        fragments.add(NavigationFragment())
+    }
 
     override fun layoutId() = R.layout.fragment_viewpager
 
     override fun initView(savedInstanceState: Bundle?) {
-        binding.datalayout.visibility = View.GONE
+        binding.datalayout.visibility = View.VISIBLE
         binding.retryButton.visibility = View.GONE
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
         binding.viewPager.isUserInputEnabled = true
-        binding.viewPager.adapter = ProjectViewPagerAdapter(this)
+        binding.viewPager.adapter = SquareViewPagerAdapter(this)
         initMagicIndicator()
-    }
-
-    override fun initListener() {
-        binding.retryButton.setOnClickListener {
-            viewModel.getProjectTitles()
-        }
-    }
-
-    override fun lazyLoadData() {
-        viewModel.getProjectTitles()
-    }
-
-    override fun createObserver() {
-        viewModel.projectTitles.observe(viewLifecycleOwner, Observer {
-            if (it.isNotEmpty()) {
-                Log.e("UserUpdate", "监听project title" + it.size)
-                binding.datalayout.visibility = View.VISIBLE
-                binding.retryButton.visibility = View.GONE
-                binding.progressBar.visibility = View.GONE
-                fragments.clear()
-                mTitleList.clear()
-                mTitleList.addAll(it)
-                it.forEach {
-                    fragments.add(OneProjectFragment.newInstance(it.id))
-                }
-                binding.magicIndicator.navigator.notifyDataSetChanged()
-                binding.viewPager.adapter?.notifyDataSetChanged()
-                binding.viewPager.offscreenPageLimit = fragments.size
-            }
-        })
-
-        viewModel.status.observe(viewLifecycleOwner, Observer {
-            Log.e("UserUpdate", "监听project status" + it)
-
-            when (it) {
-                ProjectStatus.LOADING -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.datalayout.visibility = View.GONE
-                    binding.retryButton.visibility = View.GONE
-                }
-                ProjectStatus.DONE -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.datalayout.visibility = View.VISIBLE
-                    binding.retryButton.visibility = View.GONE
-                }
-                ProjectStatus.ERROR -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.datalayout.visibility = View.GONE
-                    binding.retryButton.visibility = View.VISIBLE
-                }
-            }
-        })
-
-//        sharedViewModel.user.observe(viewLifecycleOwner, Observer {
-//            Log.e("UserUpdate", "在ProjectFragment观察it" + it)
-//        })
-
     }
 
     private fun initMagicIndicator() {
@@ -115,7 +59,7 @@ class ProjectFragment : BaseFragment<FragmentViewpagerBinding>() {
         commonNavigator.adapter = object : CommonNavigatorAdapter() {
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
                 return ScaleTransitionPagerTitleView(context).apply {
-                    text = mTitleList[index].name
+                    text = mTitleList[index]
                     textSize = 17f
                     normalColor = Color.WHITE
                     selectedColor = Color.WHITE
@@ -147,7 +91,16 @@ class ProjectFragment : BaseFragment<FragmentViewpagerBinding>() {
         ViewPager2Helper.bind(binding.magicIndicator, binding.viewPager)
     }
 
-    inner class ProjectViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+    override fun createObserver() {
+    }
+
+    override fun lazyLoadData() {
+    }
+
+    override fun initListener() {
+    }
+
+    inner class SquareViewPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
         override fun getItemCount() = fragments.size
         override fun createFragment(position: Int) = fragments[position]
     }

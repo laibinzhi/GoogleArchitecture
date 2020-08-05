@@ -1,4 +1,4 @@
-package com.lbz.googlearchitecture.ui.home
+package com.lbz.googlearchitecture.ui.square
 
 import android.os.Bundle
 import android.view.View
@@ -6,9 +6,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,16 +15,18 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.blankj.utilcode.util.ConvertUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.lbz.googlearchitecture.R
-import com.lbz.googlearchitecture.databinding.FragmentHomeBinding
+import com.lbz.googlearchitecture.databinding.ArticleCommonListLayoutBinding
+import com.lbz.googlearchitecture.databinding.FragmentAskBinding
+import com.lbz.googlearchitecture.databinding.FragmentPlazaBinding
 import com.lbz.googlearchitecture.model.Article
 import com.lbz.googlearchitecture.ui.base.BaseFragment
 import com.lbz.googlearchitecture.ui.base.BaseLoadStateAdapter
+import com.lbz.googlearchitecture.ui.home.ArticlesAdapter
 import com.lbz.googlearchitecture.ui.main.MainFragmentDirections
 import com.lbz.googlearchitecture.utils.CacheUtil
 import com.lbz.googlearchitecture.widget.SpaceItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.article_common_list_layout.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -34,61 +34,38 @@ import kotlinx.coroutines.launch
 
 /**
  * @author: laibinzhi
- * @date: 2020-07-15 08:41
+ * @date: 2020-08-04 19:04
  * @github: https://github.com/laibinzhi
  * @blog: https://www.laibinzhi.top/
  */
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>(),
-    SwipeRefreshLayout.OnRefreshListener {
+class AskFragment : BaseFragment<FragmentAskBinding>(), SwipeRefreshLayout.OnRefreshListener {
 
-    private val viewModel: ArticlesitoriesViewModel by viewModels()
+    private val viewModel: SquareViewModel by viewModels()
 
-    private val adapter = ArticlesAdapter(true)
+    private val adapter = ArticlesAdapter(false)
     private var job: Job? = null
     private var isrefreshByHand: Boolean = false
 
-    override fun layoutId(): Int = R.layout.fragment_home
+    override fun layoutId() = R.layout.fragment_ask
 
     override fun initView(savedInstanceState: Bundle?) {
-        initToolbar()
         initRecycleView()
         initSwipeRefreshLayout()
         initAdapter()
     }
 
-    override fun lazyLoadData() {
-//        viewModel = ViewModelProvider(this, iewModelFactoryArticle)
-//            .get(ArticlesitoriesViewModel::class.java)
-        getArticles()
-        getBanner()
-    }
-
     override fun createObserver() {
-//        sharedViewModel.user.observe(viewLifecycleOwner, Observer {
-//            Log.e("UserUpdate", "在HomeFragment观察it:$it")
-//            if (it != null) {
-//                it.collectIds.forEach { id ->
-//                    viewModel.updateArticleCollectStatus(id, true)
-//                }
-//            } else {
-//                viewModel.updateAllArticleUnCollect()
-//                adapter.notifyDataSetChanged()
-//            }
-//        })
     }
 
-    override fun onRefresh() {
-        isrefreshByHand = true
-        adapter.refresh()
-        viewModel.getBanner()
+    override fun lazyLoadData() {
+        getArticles()
     }
 
     override fun initListener() {
         retry_button.setOnClickListener {
             adapter.retry()
-            viewModel.getBanner()
         }
         adapter.setOnItemClickListener(object : ArticlesAdapter.OnItemClickListener {
 
@@ -110,22 +87,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
         })
     }
 
-
-    private fun initToolbar() {
-        toolbar.run {
-            title = getString(R.string.title_home)
-            inflateMenu(R.menu.home_menu)
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.home_search -> {
-                        val direction =
-                            MainFragmentDirections.actionFragmentMainToFragmentSearch()
-                        findNavController().navigate(direction)
-                    }
-                }
-                true
-            }
-        }
+    override fun onRefresh() {
+        isrefreshByHand = true
+        adapter.refresh()
     }
 
     private fun initRecycleView() {
@@ -133,7 +97,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
             SpaceItemDecoration(
                 0,
                 ConvertUtils.dp2px(8f),
-                firstNeedTop = false
+                firstNeedTop = true
             )
         )
         list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -201,23 +165,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
     private fun getArticles() {
         job?.cancel()
         job = lifecycleScope.launch {
-            viewModel.getArticles().collectLatest {
+            viewModel.getAskData().collectLatest {
                 adapter.submitData(it)
             }
         }
     }
-
-    private fun getBanner() {
-        viewModel?.let { homeModel ->
-            homeModel.banner.observe(viewLifecycleOwner, Observer {
-                if (it.isNotEmpty()) {
-                    adapter.setBanner(it)
-                    adapter.notifyDataSetChanged()
-                }
-            })
-        }
-        viewModel.getBanner()
-    }
-
 
 }

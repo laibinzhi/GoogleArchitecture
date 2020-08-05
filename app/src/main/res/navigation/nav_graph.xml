@@ -38,6 +38,11 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/fragment_square"
+        android:name="com.lbz.googlearchitecture.ui.square.SquareFragment"
+        tools:layout="@layout/fragment_viewpager" />
+
+    <fragment
         android:id="@+id/fragment_mine"
         android:name="com.lbz.googlearchitecture.ui.mine.MineFragment"
         tools:layout="@layout/fragment_home" />
