@@ -11,6 +11,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.lbz.googlearchitecture.R
 import com.lbz.googlearchitecture.databinding.FragmentViewpagerBinding
 import com.lbz.googlearchitecture.ui.base.BaseFragment
+import com.lbz.googlearchitecture.ui.navigation.NavigationFragment
+import com.lbz.googlearchitecture.ui.system.SystemFragment
+import com.lbz.googlearchitecture.utils.toHtml
 import com.lbz.googlearchitecture.widget.ScaleTransitionPagerTitleView
 import com.lbz.googlearchitecture.widget.ViewPager2Helper
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,7 +62,7 @@ class SquareFragment :BaseFragment<FragmentViewpagerBinding>(){
         commonNavigator.adapter = object : CommonNavigatorAdapter() {
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
                 return ScaleTransitionPagerTitleView(context).apply {
-                    text = mTitleList[index]
+                    text = mTitleList[index].toHtml()
                     textSize = 17f
                     normalColor = Color.WHITE
                     selectedColor = Color.WHITE

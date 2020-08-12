@@ -16,6 +16,7 @@ import com.lbz.googlearchitecture.data.project.ProjectStatus
 import com.lbz.googlearchitecture.databinding.FragmentViewpagerBinding
 import com.lbz.googlearchitecture.model.ProjectTitle
 import com.lbz.googlearchitecture.ui.base.BaseFragment
+import com.lbz.googlearchitecture.utils.toHtml
 import com.lbz.googlearchitecture.widget.ScaleTransitionPagerTitleView
 import com.lbz.googlearchitecture.widget.ViewPager2Helper
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,6 +41,7 @@ class ProjectFragment : BaseFragment<FragmentViewpagerBinding>() {
     private val viewModel: ProjectViewModel by viewModels()
 
     private var fragments: ArrayList<Fragment> = arrayListOf()
+
     private var mTitleList: ArrayList<ProjectTitle> = arrayListOf()
 
     override fun layoutId() = R.layout.fragment_viewpager
@@ -66,7 +68,6 @@ class ProjectFragment : BaseFragment<FragmentViewpagerBinding>() {
     override fun createObserver() {
         viewModel.projectTitles.observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) {
-                Log.e("UserUpdate", "监听project title" + it.size)
                 binding.datalayout.visibility = View.VISIBLE
                 binding.retryButton.visibility = View.GONE
                 binding.progressBar.visibility = View.GONE
@@ -83,8 +84,6 @@ class ProjectFragment : BaseFragment<FragmentViewpagerBinding>() {
         })
 
         viewModel.status.observe(viewLifecycleOwner, Observer {
-            Log.e("UserUpdate", "监听project status" + it)
-
             when (it) {
                 ProjectStatus.LOADING -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -115,7 +114,7 @@ class ProjectFragment : BaseFragment<FragmentViewpagerBinding>() {
         commonNavigator.adapter = object : CommonNavigatorAdapter() {
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
                 return ScaleTransitionPagerTitleView(context).apply {
-                    text = mTitleList[index].name
+                    text = mTitleList[index].name.toHtml()
                     textSize = 17f
                     normalColor = Color.WHITE
                     selectedColor = Color.WHITE

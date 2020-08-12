@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.lbz.googlearchitecture.databinding.ArticleViewItemBinding
 import com.lbz.googlearchitecture.model.Article
+import com.lbz.googlearchitecture.utils.toHtml
 
 /**
  * @author: laibinzhi
@@ -25,6 +26,7 @@ class ArticleViewHolder(
 
     private fun showArticleData(article: Article) {
         binding.article = article
+        binding.itemHomeContent.text = article.title.toHtml()
         binding.showTag = true
         binding.itemHomeCollect.setOnClickListener {
             listener.collect(article, it as ImageView)

@@ -12,5 +12,4 @@ object ArticleType {
     const val SEARCH_RESULT_ARTICLE = 3
     const val PLAZA_ARTICLE = 4
     const val ASK_ARTICLE = 5
-
 }

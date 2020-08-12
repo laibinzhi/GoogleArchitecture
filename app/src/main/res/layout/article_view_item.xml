@@ -17,6 +17,8 @@
 
         <import type="java.util.List" />
 
+        <import type="com.lbz.googlearchitecture.utils.CommonExtKt" />
+
     </data>
 
     <androidx.cardview.widget.CardView
@@ -117,10 +119,10 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="@{article.title}"
                 android:textColor="@color/colorBlack333"
                 android:textSize="@dimen/dp_14"
                 android:textStyle="bold"
+                app:textHtml="@{article.title}"
                 tools:text="这是一个根据JetpackMvvm框架开发玩Android的一个APP" />
 
             <RelativeLayout

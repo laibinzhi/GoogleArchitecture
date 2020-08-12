@@ -55,6 +55,12 @@ interface LbzService {
     @GET("/wenda/list/{page}/json")
     suspend fun getAskData(@Path("page") page: Int): DataResponse<PageBean<Article>>
 
+    @GET("/tree/json")
+    fun getTreeSystemAsync(): Deferred<DataResponse<List<TreeSystem>>>
+
+    @GET("/navi/json")
+    fun getNavigationDataAsync(): Deferred<DataResponse<List<NavigationResponse>>>
+
     companion object {
         const val BASE_URL = "https://www.wanandroid.com"
     }

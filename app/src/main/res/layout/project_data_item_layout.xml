@@ -87,10 +87,10 @@
                     android:layout_toEndOf="@+id/item_project_imageview"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:text="@{project.title}"
                     android:textColor="@color/colorBlack333"
                     android:textSize="14dp"
                     android:textStyle="bold"
+                    app:textHtml="@{project.title}"
                     tools:text="这是一个菜的扣jio的人写的项目" />
 
                 <TextView
@@ -108,9 +108,9 @@
                     android:includeFontPadding="true"
                     android:lineSpacingMultiplier="1.4"
                     android:maxLines="3"
-                    android:text="@{project.desc}"
                     android:textColor="@color/colorBlack666"
                     android:textSize="13dp"
+                    app:textHtml="@{project.desc}"
                     tools:text="一个Jetpack结合MVVM的快速开发框架，基于MVVM模式集成谷歌官方推荐的JetPack组件库：LiveData、ViewModel、Lifecycle组件 使用Kotlin语言，添加大量拓展函数，简化代码 加入Retrofit网络请求,协程，帮你简化各种操作，让你快速开发项目" />
             </RelativeLayout>
 

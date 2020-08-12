@@ -15,7 +15,7 @@ import com.lbz.googlearchitecture.model.*
  * @blog: https://www.laibinzhi.top/
  */
 @Database(
-    entities = [Article::class, RemoteKeys::class, ProjectTitle::class, ProjectData::class, ProjectRemoteKeys::class, Banner::class, Hotkey::class, SearchHistory::class,User::class],
+    entities = [Article::class, RemoteKeys::class, ProjectTitle::class, ProjectData::class, ProjectRemoteKeys::class, Banner::class, Hotkey::class, SearchHistory::class, User::class, TreeSystem::class, NavigationResponse::class],
     version = 1,
     exportSchema = false
 )
@@ -27,6 +27,7 @@ abstract class LbzDatabase : RoomDatabase() {
     abstract fun projectRemoteKeysDao(): ProjectRemoteKeysDao
     abstract fun searchDao(): SearchDao
     abstract fun userDao(): UserDao
+    abstract fun squareDao(): SquareDao
 
     companion object {
 
