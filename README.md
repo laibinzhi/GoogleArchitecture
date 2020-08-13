@@ -567,7 +567,7 @@ class ArticlesitoriesViewModel @ViewModelInject constructor(private val reposito
 
 
 ## 运行截图
-![image](http://lbz-blog.test.upcdn.net/post/l0vch-om7d2.gif)
+![image](https://s31.aconvert.com/convert/p3r68-cdx67/pu86h-6n1cj.gif)
 
 
 ## 最后
