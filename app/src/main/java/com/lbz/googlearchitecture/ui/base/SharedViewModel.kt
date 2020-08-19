@@ -1,8 +1,9 @@
 package com.lbz.googlearchitecture.ui.base
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.lbz.googlearchitecture.data.callback.UnPeekLiveData
+import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.lbz.googlearchitecture.model.User
 
 /**
