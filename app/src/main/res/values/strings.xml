@@ -12,7 +12,7 @@
     <string name="title_square">广场</string>
     <string name="title_mine">我的</string>
     <string name="null_tag">null</string>
-    <string name="fab_scrolling_view_behavior">com.lbz.googlearchitecture.widget.FastBackTopFabBehaviorJava</string>
+    <string name="fab_scrolling_view_behavior">com.lbz.googlearchitecture.widget.FastBackTopFabBehavior</string>
     <string name="article_tag_top">置顶</string>
     <string name="article_tag_new">新</string>
     <string name="mine">我的</string>
