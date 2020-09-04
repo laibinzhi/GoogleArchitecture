@@ -1,15 +1,25 @@
 # GoogleArchitecture
 
-Architecture Components
-- Jetpack
-- Room
-- Paging3
-- DataBinding
-- ViewModel
-- LiveData
-- Hilt
-- Kotlin Coroutine
+- 100% [Kotlin](https://kotlinlang.org/) based + [Coroutines](https://github.com/Kotlin/kotlinx.coroutines) + [Flow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/) for asynchronous.
+- JetPack
+  - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) - notify domain layer data to views.
+  - [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle) - dispose observing data when lifecycle state changes.
+  - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) - UI related data holder, lifecycle aware.
+  - [Room](https://developer.android.com/topic/libraries/architecture/room) Persistence - construct database.
+  - [Paging3](https://developer.android.com/topic/libraries/architecture/paging/v3-overview) - display data on recycleView
+  - [Navigation](https://developer.android.com/guide/navigation) - one Activity 
+
+- Architecture
+  - MVVM Architecture (View - DataBinding - ViewModel - Model)
+  - Repository pattern
+  - [Hilt](https://developer.android.com/training/dependency-injection/hilt-android) - dependency injection
+  - [SSOT](https://en.wikipedia.org/wiki/Single_source_of_truth) - single-source-of-truth
+- Material Design & Animations
+- [Retrofit2 & Gson](https://github.com/square/retrofit) - constructing the REST API
+- [OkHttp3](https://github.com/square/okhttp) - implementing interceptor, logging and mocking web server
+- [Glide](https://github.com/bumptech/glide) - loading images
 - ViewPager2
+
 
 
 
