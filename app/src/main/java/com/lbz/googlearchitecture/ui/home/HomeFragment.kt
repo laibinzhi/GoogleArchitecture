@@ -59,24 +59,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
     }
 
     override fun lazyLoadData() {
-//        viewModel = ViewModelProvider(this, iewModelFactoryArticle)
-//            .get(ArticlesitoriesViewModel::class.java)
         getArticles()
         getBanner()
     }
 
     override fun createObserver() {
-//        sharedViewModel.user.observe(viewLifecycleOwner, Observer {
-//            Log.e("UserUpdate", "在HomeFragment观察it:$it")
-//            if (it != null) {
-//                it.collectIds.forEach { id ->
-//                    viewModel.updateArticleCollectStatus(id, true)
-//                }
-//            } else {
-//                viewModel.updateAllArticleUnCollect()
-//                adapter.notifyDataSetChanged()
-//            }
-//        })
+
     }
 
     override fun onRefresh() {
